@@ -2,7 +2,7 @@ extends Node2D
 
 var network = NetworkedMultiplayerENet.new()
 var ip = "127.0.0.1"
-var port = 5030
+var port = 1911
 
 func _ready():
 	connect_to_server()
@@ -17,6 +17,13 @@ func connect_to_server():
 func _on_connnection_failed():
 	print("failed to connect to authentication server")
 	
-func _on_connnection_succeeded():
+func _on_connection_succeeded():
 	print("successfully connected to authentication server")
 	
+func authenticate_player(username, password, player_id):
+	print("sending out authentication request for " + username + " (" + str(player_id) + ")")
+	rpc_id(1, "authenticate_player", username, password, player_id)
+	
+remote func authentication_results(result, player_id):
+	print("authentication results recieved for " + str(player_id))
+	gateway.return_login_request(result, player_id)

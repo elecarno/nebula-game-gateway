@@ -2,13 +2,13 @@ extends Node
 
 var network = NetworkedMultiplayerENet.new()
 var gateway_api = MultiplayerAPI.new()
-var port = 5050
+var port = 1910
 var max_players = 100
 
 func _ready():
 	start_server()
 	
-func _process(delta):
+func _process(_delta):
 	if not custom_multiplayer.has_network_peer():
 		return
 	custom_multiplayer.poll()
@@ -28,3 +28,12 @@ func _peer_connected(player_id):
 	
 func _peer_disconnected(player_id):
 	print("user " + str(player_id) + " disconnected")
+	
+remote func login_request(username, password):
+	print("login request recieved")
+	var player_id = custom_multiplayer.get_rpc_sender_id()
+	authenticate.authenticate_player(username, password, player_id)
+	
+func return_login_request(result, player_id):
+	rpc_id(player_id, "return_login_request", result)
+	network.disconnect_peer(player_id)
