@@ -24,6 +24,6 @@ func authenticate_player(username, password, player_id):
 	print("sending out authentication request for " + username + " (" + str(player_id) + ")")
 	rpc_id(1, "authenticate_player", username, password, player_id)
 	
-remote func authentication_results(result, player_id):
+remote func authentication_results(result, player_id, token):
 	print("authentication results recieved for " + str(player_id))
-	gateway.return_login_request(result, player_id)
+	gateway.return_login_request(result, player_id, token)
