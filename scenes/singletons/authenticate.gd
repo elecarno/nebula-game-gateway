@@ -27,3 +27,11 @@ func authenticate_player(username, password, player_id):
 remote func authentication_results(result, player_id, token):
 	print("authentication results recieved for " + str(player_id))
 	gateway.return_login_request(result, player_id, token)
+	
+func create_account(username, password, player_id):
+	print("sending out create account request")
+	rpc_id(1, "create_account", username, password, player_id)
+
+remote func create_account_results(result, player_id, message):
+	print("results recieved and replying to player create account request")
+	gateway.return_create_account_request(result, player_id, message)

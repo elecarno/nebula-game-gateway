@@ -37,3 +37,23 @@ remote func login_request(username, password):
 func return_login_request(result, player_id, token):
 	rpc_id(player_id, "return_login_request", result, token)
 	network.disconnect_peer(player_id)
+	
+remote func create_account_request(username, password):
+	var player_id = custom_multiplayer.get_rpc_sender_id()
+	var valid_request = true
+	if username == "":
+		valid_request = false
+	if password == "":
+		valid_request = false
+	if password.length() <= 4:
+		valid_request = false
+		
+	if valid_request == false:
+		return_create_account_request(valid_request, player_id, 1)
+	else:
+		authenticate.create_account(username, password, player_id)
+		
+func return_create_account_request(result, player_id, message):
+	rpc_id(player_id, "return_create_account_request", result, message)
+	# 1 = failed to create, 2 = existing username, 3 = welcome
+	network.disconnect_peer(player_id)
